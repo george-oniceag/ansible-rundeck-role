@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-{% set vars = item.value %}
-{% for node in vars.iteritems()  %}
+{% for node in groups[item.key+"-nodes"]  %}
+{% if hostvars[node].rundeck_tags is defined %}
+{% set vars_tags = hostvars[node].rundeck_tags %}
+{% else %}
+{% set vars_tags = 'all' %}
+{% endif %}
   <node
     name="{{hostvars[node].ansible_nodename}}" 
     hostname="{{hostvars[node].ansible_hostname}}"
@@ -10,13 +14,9 @@
     osName="{{hostvars[node].ansible_distribution}} "
     osFamily="{{hostvars[node].ansible_os_family}}"
     osVersion="{{hostvars[node].ansible_kernel}}"
-{% for key,data in vars[node].iteritems() %}
-{% if key == 'tags' %}
-    {{key}}="{{data|join(',')}}"
-{% else %}
-    {{key}}="{{data}}"
-{% endif %}
-{% endfor %}
+    description="{{node}} - in project {{item.key}}"
+    username="{{hostvars[node].rundeck_username|default('root')}}"
+    tags="{{item.key}},{{vars_tags}}"
   />
 {% endfor %}
 </project>

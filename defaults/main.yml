@@ -109,9 +109,5 @@ rundeck_location:
                 config: '/etc/rundeck'       
 
 rundeck_nodes:
-        KRM:
-             'TSKRMCBQLFAN01': 
-                        description: "KRM Ansible Machine"
-                        tags: ['KRM','ansible']
-                        username: root
+        KRM
          
