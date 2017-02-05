@@ -1,0 +1,4 @@
+---
+- name: Verify and install repo
+  include: "{{ansible_os_family|lower}}_install.yml"
+  become: true

@@ -1,0 +1,28 @@
+---
+- block:
+    - name: start rundeckd
+      systemd: name=rundeckd state=started
+      become: true
+
+    - name: restart rundeckd
+      systemd: name=rundeckd state=restarted
+      become: true
+
+    - name: enable rundeckd
+      systemd: name=rundeckd enabled=yes
+      become: true
+  when: ansible_service_mgr == "systemd"
+
+- block:
+    - name: start rundeckd
+      service: name=rundeckd state=started
+      become: true
+
+    - name: restart rundeckd
+      service: name=rundeckd state=restarted
+      become: true
+
+    - name: enable rundeckd
+      service: name=rundeckd enabled=yes
+      become: true
+  when: ansible_service_mgr == "service"

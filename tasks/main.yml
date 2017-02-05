@@ -1,0 +1,42 @@
+---
+- name: Install data based on OS
+  include: "{{ansible_os_family|lower}}_install.yml"
+  become: true
+  tags: ['rundeck_install']
+
+
+- name: Deploy rundeck configuration file
+  vars:
+        dict: "{{rundeck}}"
+  template: 
+        src: "{{item.key}}.j2"
+        dest: "/etc/rundeck/{{item.key}}"
+        owner: 'rundeck'
+        group: 'rundeck'
+        mode: 0640
+  with_dict: "{{rundeck}}"
+  notify: restart rundeckd
+  tags: ['rundeck_config']
+
+- name: Add JDBC Driver
+  copy: 
+        src: 'oracle/ojdbc14.jar' 
+        dest: '/var/lib/rundeck/libext/ojbdc14.jar'
+        owner: 'rundeck'
+        group: 'rundeck'
+        mode: 0644
+  when: rundeck['rundeck-config.properties'].datasource.url | search('jdbc:oracle')
+  notify: restart rundeckd
+  tags: ['rundeck_base_config']
+
+- name: Configure nodes
+  vars:
+        dict: "{{rundeck_nodes}}"
+  template: 
+        src: resources.xml.j2
+        dest: "/var/rundeck/projects/{{item.key}}/etc/resources.xml"
+        owner: rundeck
+        group: rundeck
+        mode: 0644
+  with_dict: "{{rundeck_nodes}}"
+  tags: ['rundeck_nodes']

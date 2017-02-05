@@ -1,0 +1,12 @@
+- name: Install prerequisites 
+  yum: name="{{item}}" state=present
+  with_items:
+        - 'java-1.8.0'
+        - 'http://repo.rundeck.org/latest.rpm'
+  register: rundeck_repo_status
+
+- name: Install Rundeck
+  yum: name=rundeck state=present
+  notify: enable rundeckd
+
+

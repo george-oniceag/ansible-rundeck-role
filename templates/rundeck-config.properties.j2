@@ -1,0 +1,55 @@
+#####################################################################
+# Ansible generate file ! Please do not edit !
+# Generated for  : {{ansible_hostname}}
+# File name      : rundeck-config.properties 
+######################################################################
+{% set vars = dict['rundeck-config.properties'] %}
+
+#loglevel.default is the default log level for jobs: ERROR,WARN,INFO,VERBOSE,DEBUG
+{% for key,value in vars.log.iteritems() %}
+{{key}}={{value}}
+{% endfor %}
+
+#rss.enabled if set to true enables RSS feeds that are public (non-authenticated)
+rss.enable={{vars.rss.enabled}}
+
+# change hostname here
+grails.serverURL=http://{{vars.grails.server}}:{{vars.grails.port}}
+
+#DataSource configuration
+{% if not 'jdbc:h2:file' in vars.datasource.url %}
+{% for name,value in vars.datasource.iteritems() %}
+dataSource.{{name}} = {{value}}
+{% endfor %}
+{% else %}
+dataSource.dbCreate = {{vars.datasource.dbCreate}}
+dataSource.url = {{vars.datasource.url}}
+{% endif %}
+
+#Storage Provider
+#################
+
+#Key Storage
+{% for key,value in vars.storage.provider.iteritems() %}
+{% for name,subvalue in value.iteritems() %}
+rundeck.storage.provider.{{key}}.{{name}}={{subvalue}}
+{% endfor %}
+{% endfor %}
+
+#Config Storage
+{% if vars.config.storage.provider.1.type == 'db' %}
+rundeck.projectsStorageType=db
+{% endif %}
+
+{% for key,value in vars.config.storage.provider.iteritems() %}
+{% for name,subvalue in value.iteritems() %}
+rundeck.config.storage.provider.{{key}}.{{name}}={{subvalue}}
+{% endfor %}
+{% endfor %}
+
+{% if vars.converter_enabled == true %}
+#Data encryption
+{% for name,value in vars.converter.iteritems() %}
+rundeck.storage.converter.1.{{name}}={{value}}
+{% endfor %}
+{% endif %}

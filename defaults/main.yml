@@ -1,0 +1,117 @@
+rundeck:
+    'rundeck-config.properties':
+        log:
+                'loglevel.default': 'INFO' # ERROR,WARN,INFO,VERBOSE,DEBUG
+                'rdeck.base': '/var/lib/rundeck'
+        rss:
+                enabled: false
+        grails:
+                server: localhost
+                port: 4440
+        datasource:
+                dbCreate: update
+                #url: jdbc:h2:file:/var/lib/rundeck/data/rundeckdb;MVCC=true #for file config
+                url: 'jdbc:mysql://localhost/rundeckdb?autoReconnect=true'
+                username: 'rundeckuser'
+                password: 'vW56bhEaxmgpKQQKG7zx'
+                #dialect: 'org.hibernate.dialect.Oracle10gDialect'  #for oracle
+                #driverClassName: 'oracle.jdbc.driver.OracleDriver' #for oracle
+        storage:
+                provider:
+                        1:
+                         type: db
+                         path: '/keys'
+        config:
+                storage:
+                        provider:
+                                1:
+                                 type: db
+                                 path: '/projects'
+        converter:
+                 type: 'jasypt-encryption'
+                 path: '/keys'
+                 'config.password': 'tdmPCfh84VkMUtUk'
+        converter_enabled: true
+    'realm.properties':          #user configuration
+        admin:
+                password: "{{vault_users.admin}}"
+                rights: ['user','admin','architect','deploy','build']
+        olpsNSI:
+                password: "{{vault_users.olpsNSI}}"
+                rights: ['user','admin','architect','deploy','build']
+        guest:
+                password: "{{vault_users.guest}}"
+                rights: ['user','guest']
+    'admin.aclpolicy':           #group policy configuration
+        admin: 
+                description:  'Admin, all access'
+                context:
+                        project: 
+                            proj_name: '.*' #all projects or project name
+                            resource: 
+                                job  : ['create','delete']
+                                node : ['read','create','update','refresh']
+                                event: ['read','create']
+                            adhoc:
+                                '.*': ['read','run','runsAs','kill','killAs']
+                            job:
+                                '.*': ['read','update','delete','run','runAs','kill','killAs','create','toggle_schedule','toggle_execution']
+                            node:
+                                '.*': ['read','run']
+                        application: 
+                            app_name: 'rundeck'  #define application access 
+                            resource: 
+                                project: ['create']
+                                system : ['read','enable_executions','disable_executions','admin']
+                                system_acl : ['read','create','update','delete','admin']
+                                user: ['admin']
+                                job:  ['admin']
+                            project: 
+                                '.*': ['read','configure','delete','import','export','delete_execution','admin']
+                            project_acl:
+                                '.*': ['read','create','update','delete','admin']
+                            storage:
+                                #'/keys/*': ['read','update']
+                                '.*': ['read','create','udpate','delete']
+        guest:
+                description:  'Guest, read-only access'
+                context:
+                        project:
+                            proj_name: '.*' #all projects or project name
+                            resource:
+                                job  : ['']
+                                node : ['read''refresh']
+                                event: ['read']
+                            adhoc:
+                                '.*': ['read']
+                            job:
+                                '.*': ['read']
+                            node:
+                                '.*': ['read']
+                        application:
+                            app_name: 'rundeck'  #define application access
+                            resource:
+                                project: ['create']
+                                system : ['read']
+                                system_acl : ['read']
+                                user: ['']
+                                job:  ['']
+                            project:
+                                '.*': ['read','export']
+                            project_acl:
+                                '.*': ['read']
+                            storage:
+                                #'/keys/*': ['read','update']
+                                '.*': ['read']
+                        
+rundeck_location:
+        redhat: 
+                config: '/etc/rundeck'       
+
+rundeck_nodes:
+        KRM:
+             'TSKRMCBQLFAN01': 
+                        description: "KRM Ansible Machine"
+                        tags: ['KRM','ansible']
+                        username: root
+         

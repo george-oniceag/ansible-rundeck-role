@@ -1,0 +1,43 @@
+
+{% set vars = dict['admin.aclpolicy'] %}
+## Configured Security Groups and ACLs
+{% for key0,value0 in vars.iteritems() %}
+{% for key1,value1 in value0.context.iteritems() %}
+description: {{value0.description}} for {{key0}}
+context:
+{% for key2,value2 in value1.iteritems() %}
+{% if key2 == 'proj_name' or key2 == 'app_name' %}
+  {{key1}}: '{{value2}}'
+{% endif %}{% endfor %}
+for:
+{% for key2,value2 in value1.iteritems() %}
+{% if not key2 == 'proj_name' and not key2 == 'app_name' %}
+  {{key2}}:
+{% for key3,value3 in value2.iteritems() %}
+{% if not value3|join(',') == '' %} 
+{% if key2 == 'resource' %}
+    - equals:
+        kind: '{{key3}}'
+      allow: [{{value3|join(',')}}]
+{% elif key2 == 'adhoc' %}
+    - allow: [{{value3|join(',')}}]
+{% else %}
+{% if key3 == '.*' %}
+    - allow: [{{value3|join(',')}}]
+{% else %}
+    - match:
+{% if key2 == 'node' %}
+       nodename: '{{key3}}'
+{% else %}
+       name: '{{key3}}'
+{% endif %}
+     allow: [{{value3|join(',')}}]
+{% endif %}{% endif %}
+{% endif %}{% endfor %}
+{% endif %}{% endfor %}
+by:
+  group: {{key0}}
+
+---
+
+{% endfor %}{% endfor %}
