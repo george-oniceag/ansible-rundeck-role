@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-{% set vars = dict %}
-{% for proj,node_data in vars.iteritems() %}
-{% for node in node_data %}
+{% set vars = item.value %}
+{% for node in vars.iteritems()  %}
   <node
     name="{{hostvars[node].ansible_nodename}}" 
     hostname="{{hostvars[node].ansible_hostname}}"
@@ -11,7 +10,7 @@
     osName="{{hostvars[node].ansible_distribution}} "
     osFamily="{{hostvars[node].ansible_os_family}}"
     osVersion="{{hostvars[node].ansible_kernel}}"
-{% for key,data in node_data[node].iteritems() %}
+{% for key,data in vars[node].iteritems() %}
 {% if key == 'tags' %}
     {{key}}="{{data|join(',')}}"
 {% else %}
@@ -19,5 +18,5 @@
 {% endif %}
 {% endfor %}
   />
-{% endfor %}{% endfor %}
+{% endfor %}
 </project>
