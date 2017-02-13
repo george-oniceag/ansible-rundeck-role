@@ -9,7 +9,7 @@
 {% endif %}
   <node
     name="{{hostvars[node].ansible_nodename}}" 
-    hostname="{{hostvars[node].ansible_host}}"
+    hostname="{{hostvars[node].ansible_hostname}}"
     osArch="{{hostvars[node].ansible_architecture}} "
     osName="{{hostvars[node].ansible_distribution}} "
     osFamily="{{hostvars[node].ansible_os_family}}"

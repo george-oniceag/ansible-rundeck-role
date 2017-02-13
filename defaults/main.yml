@@ -108,6 +108,6 @@ rundeck_location:
         redhat: 
                 config: '/etc/rundeck'       
 
-rundeck_nodes:
-        KRM
+rundeck_projects:
+        - KRM
          

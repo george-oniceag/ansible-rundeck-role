@@ -1,0 +1,9 @@
+- name: Configure nodes
+  template:
+        src: resources.xml.j2
+        dest: "/var/rundeck/projects/{{item}}/etc/resources.xml"
+        owner: rundeck
+        group: rundeck
+        mode: 0644
+  with_items: "{{rundeck_projects}}"
+  tags: ['rundeck_nodes']
