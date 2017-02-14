@@ -109,5 +109,10 @@ rundeck_location:
                 config: '/etc/rundeck'       
 
 rundeck_projects:
-        - KRM
+         KRM:
+                rebound_usage: yes
+                rebound_host: 'INKBUCBRRB01'
+                rebound_port: '22'
+                rebound_key: '~/.ssh/id_rsa'
+                rebound_user: 'root'
          

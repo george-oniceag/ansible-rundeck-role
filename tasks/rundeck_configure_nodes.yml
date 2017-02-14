@@ -1,9 +1,19 @@
 - name: Configure nodes
   template:
         src: resources.xml.j2
-        dest: "/var/rundeck/projects/{{item}}/etc/resources.xml"
+        dest: "/var/rundeck/projects/{{item.key}}/etc/resources.xml"
         owner: rundeck
         group: rundeck
         mode: 0644
-  with_items: "{{rundeck_projects}}"
+  with_dict: "{{rundeck_projects}}"
+  tags: ['rundeck_nodes']
+
+- name: Configure SSH access for nodes
+  template:
+        src: ssh_local_config.j2
+        dest: "/root/.ssh/config"
+        owner: root
+        group: root
+        mode: 0644
+  with_dict: "{{rundeck_projects}}"
   tags: ['rundeck_nodes']

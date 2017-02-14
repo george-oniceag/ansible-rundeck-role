@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-{% for node in groups[item+"-nodes"]  %}
+{% for node in groups[item.key+"-nodes"]  %}
 {% if hostvars[node].rundeck_tags is defined %}
 {% set vars_tags = hostvars[node].rundeck_tags %}
 {% else %}
@@ -9,14 +9,14 @@
 {% endif %}
   <node
     name="{{hostvars[node].ansible_nodename}}" 
-    hostname="{{hostvars[node].ansible_host}}"
+    hostname="{{hostvars[node].ansible_nodename}}"
     osArch="{{hostvars[node].ansible_architecture}} "
     osName="{{hostvars[node].ansible_distribution}} "
     osFamily="{{hostvars[node].ansible_os_family}}"
     osVersion="{{hostvars[node].ansible_kernel}}"
-    description="{{node}} - in project {{item}}"
+    description="{{node}} - in project {{item.key}}"
     username="{{hostvars[node].rundeck_username|default('root')}}"
-    tags="{{item}},{{vars_tags}}"
+    tags="{{item.key}},{{vars_tags}}"
   />
 {% endfor %}
 </project>
