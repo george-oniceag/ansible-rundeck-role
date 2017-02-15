@@ -31,5 +31,5 @@
 
 - name: Include node configuration tasks
   include: rundeck_configure_nodes.yml
-  tags: ['rundeck_nodes']
+  tags: ['rundeck_nodes','rundeck_ssh_proxy']
 
