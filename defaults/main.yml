@@ -1,4 +1,22 @@
 rundeck:
+    'framework.properties':
+        server:
+                name: "nsi-run-cube"
+                hostname: "nsi-run-cube.itn.ftgroup"
+                port: 4440
+                url: "http://nsi-run-cube.itn.ftgroup:4440"
+        base: '/var/lib/rundeck'
+        misc: 
+                'projects.dir': '/var/rundeck/projects'
+                'etc.dir':      '/etc/rundeck'
+                'var.dir':      '/var/lib/rundeck/var'
+                'tmp.dir':      '/var/lib/rundeck/var/tmp'
+                'logs.dir':     '/var/lib/rundeck/logs'
+                'libext.dir':   '/var/lib/rundeck/libext'
+        ssh: 
+                keypath: '/var/lib/rundeck/.ssh/id_rsa'
+                user:   'rundeck'
+                timeout: 0
     'rundeck-config.properties':
         log:
                 'loglevel.default': 'INFO' # ERROR,WARN,INFO,VERBOSE,DEBUG

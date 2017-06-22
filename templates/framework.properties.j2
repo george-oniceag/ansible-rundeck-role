@@ -1,0 +1,37 @@
+#####################################################################
+## Ansible generate file ! Please do not edit !
+## Generated for  : {{ansible_hostname}}
+## File name      : framework.properties
+#######################################################################
+{% set vars = dict['framework.properties'] %}
+# framework.properties -
+#
+
+# ----------------------------------------------------------------
+# Rundeck server connection information
+# ----------------------------------------------------------------
+
+{% for name,value in vars.server.iteritems() %}
+framework.server.{{name}} = {{value}}
+{% endfor %}
+
+# ----------------------------------------------------------------
+# Installation locations
+# ----------------------------------------------------------------
+
+rdeck.base={{vars.base}}
+
+{% for name,value in vars.misc.iteritems() %}
+framework.{{name}}={{value}}
+{% endfor %}
+
+# ----------------------------------------------------------------
+# SSH defaults for node executor and file copier
+# ----------------------------------------------------------------
+
+{% for name,value in vars.ssh.iteritems() %}
+framework.ssh.{{name}} = {{value}}
+{% endfor %}
+
+# ssh connection timeout after a specified number of milliseconds.
+# "0" value means wait forever.
